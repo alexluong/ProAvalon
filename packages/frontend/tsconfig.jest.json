@@ -1,7 +1,0 @@
-// Need this to force the tsx compilation before jest runs
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "jsx": "react"
-  }
-}

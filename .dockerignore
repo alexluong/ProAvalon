@@ -1,8 +1,0 @@
-*
-!packages/backend/*
-!packages/frontend/*
-packages/backend/node_modules/
-packages/frontend/node_modules/
-!./**/package-lock.json
-!./**/package.json
-!lerna.json
