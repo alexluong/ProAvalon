@@ -2,12 +2,15 @@ import { Module } from "@nestjs/common";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 // Modules
-import { UserModule } from "./user/user.module";
+import { UserModule } from "./modules/user/user.module";
+import { AuthModule } from "./modules/auth/auth.module";
 
 const migrationsDir = "/db/migrations";
 
 @Module({
   imports: [
+    AuthModule,
+    UserModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
@@ -25,8 +28,6 @@ const migrationsDir = "/db/migrations";
         useUnifiedTopology: true,
       }),
     }),
-
-    UserModule,
   ],
 })
 export class AppModule {}

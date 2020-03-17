@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { MongoRepository } from "typeorm";
-import { ObjectID } from "mongodb";
+import { MongoRepository, ObjectID, FindOneOptions } from "typeorm";
 import { User } from "./user.entity";
+import { UserCreateBody } from "./user.dto";
 
 @Injectable()
 export class UserService {
@@ -11,12 +11,19 @@ export class UserService {
     private readonly userRepository: MongoRepository<User>,
   ) {}
 
-  findOne(id: string): Promise<User> {
-    return this.userRepository.findOne(id);
+  findOne(
+    optionsOrConditions?: string | number | Date | ObjectID | FindOneOptions<User> | Partial<User>,
+    maybeOptions?: FindOneOptions<User>,
+  ): Promise<User | undefined> {
+    return this.userRepository.findOne(optionsOrConditions, maybeOptions);
   }
 
-  createOne(userData: User): Promise<User> {
-    return this.userRepository.save(userData);
+  async createOne(userData: UserCreateBody): Promise<User> {
+    const user = this.userRepository.create(userData);
+    if (user.password) {
+      await user.hashPassword();
+    }
+    return this.userRepository.save(user);
   }
 
   async updateOne(id: string, userData: User): Promise<void> {
